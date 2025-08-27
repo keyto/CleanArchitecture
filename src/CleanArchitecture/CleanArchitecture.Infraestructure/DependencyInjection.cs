@@ -47,8 +47,15 @@ namespace CleanArchitecture.Infraestructure
             // registrar el mapeador que se creo en CleanArchitecture.Infraestructure.Data.DateOnlyTypeHandler
             SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
 
-            // inyectar la cadena de conexiopm para el ISqlConnectionFactory
-            services.AddSingleton<ISqlConnectionFactory>(_ => new SqlConnectionFactory(connectionString) );
+            // inyectar la cadena de conexiopm para el IPostgresConnectionFactory
+            services.AddSingleton<IPostgresConnectionFactory>(_ => new PostgresConnectionFactory(connectionString) );
+
+
+            // inyectar la cadena de conexion para SQL Server
+            var connectionStringSql = configuration.GetConnectionString("DatabaseSql")
+               ?? throw new ArgumentException(nameof(configuration));
+
+            services.AddSingleton<ISqlServerConnectionFactory>(_ => new SqlServerConnectionFactorySql(connectionStringSql));
 
             return services;
         }

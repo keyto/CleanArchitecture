@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Abstractions.Data
-{
-    public interface ISqlConnectionFactory
+{     
+    public interface ISqlServerConnectionFactory
     {
         IDbConnection CreateConnection();
     }

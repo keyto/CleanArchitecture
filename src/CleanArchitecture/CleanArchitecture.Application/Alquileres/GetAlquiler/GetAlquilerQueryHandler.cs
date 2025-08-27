@@ -17,16 +17,16 @@ namespace CleanArchitecture.Application.Alquileres.GetAlquiler
     // Lo que es expuesto es el Query (El que le llama)
     internal sealed class GetAlquilerQueryHandler : IQueryHandler<GetAlquilerQuery, AlquilerResponse>
     {
-        private readonly ISqlConnectionFactory _SqlConnectionFactory;
+        private readonly IPostgresConnectionFactory _PostgresConnectionFactory;
 
-        public GetAlquilerQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
+        public GetAlquilerQueryHandler(IPostgresConnectionFactory postgresConnectionFactory)
         {
-            _SqlConnectionFactory = sqlConnectionFactory;
+            _PostgresConnectionFactory = postgresConnectionFactory;
         }
 
         public async Task<Result<AlquilerResponse>> Handle(GetAlquilerQuery request, CancellationToken cancellationToken)
         {
-            using var _connection =  _SqlConnectionFactory.CreateConnection();
+            using var _connection = _PostgresConnectionFactory.CreateConnection();
 
             var sql = """
                 SELECT 

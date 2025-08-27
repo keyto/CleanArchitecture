@@ -19,10 +19,10 @@ namespace CleanArchitecture.Api.Extensions
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var service = scope.ServiceProvider;
-                var sqlConnectionFactory  = scope.ServiceProvider.GetRequiredService<ISqlConnectionFactory>();
+                var postGreeConnectionFactory  = scope.ServiceProvider.GetRequiredService<IPostgresConnectionFactory>();
 
                 // creamos conexion a la bd
-                using var connection = sqlConnectionFactory.CreateConnection();
+                using var connection = postGreeConnectionFactory.CreateConnection();
 
                 //instanciar el obj que nos permite crear los datos de prueba
                 var faker = new Faker();

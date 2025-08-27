@@ -21,11 +21,11 @@ namespace CleanArchitecture.Application.Vehiculos.SearchVehiculos
            (int)AlquilerStatus.Confirmado,
            (int)AlquilerStatus.Completado
         };
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
+        private readonly IPostgresConnectionFactory _PostgresConnectionFactory;
 
-        public SearchVehiculosQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
+        public SearchVehiculosQueryHandler(IPostgresConnectionFactory postgresConnectionFactory)
         {
-            _sqlConnectionFactory = sqlConnectionFactory;
+            _PostgresConnectionFactory = postgresConnectionFactory;
         }
 
         public async Task<Result<IReadOnlyList<VehiculoResponse>>> Handle(SearchVehiculosQuery request, CancellationToken cancellationToken)
@@ -35,7 +35,7 @@ namespace CleanArchitecture.Application.Vehiculos.SearchVehiculos
                 return new List<VehiculoResponse>();
             }
 
-            using var connection = _sqlConnectionFactory.CreateConnection();
+            using var connection = _PostgresConnectionFactory.CreateConnection();
 
             const string sql = """
                  SELECT 
