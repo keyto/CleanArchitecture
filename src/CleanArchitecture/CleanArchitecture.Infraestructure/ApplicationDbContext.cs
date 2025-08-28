@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CleanArchitecture.Infraestructure
 {
@@ -23,9 +24,11 @@ namespace CleanArchitecture.Infraestructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // se indica que se apliquen las configuraciones dentro del modelBuilder
-
             // Con esta linea nos aseguramos que se aplican las configuraciones programadas en el Assemby.
             // directorio Configurations. y despues aplicar las configuraciones al modelo de EF.
+            // busca todas las clases en el assembly de Infrastructure que implementen IEntityTypeConfiguration<T>.
+            // Ejemplo(dentro de Infrastructure/Configurations):
+            // Es decir, EF creara las tablas en BD de las entidades que hereden de IEntityTypeConfiguration<T>.
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
         }
