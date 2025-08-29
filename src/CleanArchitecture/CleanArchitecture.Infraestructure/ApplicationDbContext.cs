@@ -37,6 +37,7 @@ namespace CleanArchitecture.Infraestructure
         {
             try
             {
+                // 1. Guardar primero los cambios en la base de datos
                 var result = await base.SaveChangesAsync(cancellation);
 
                 // publicar domain events
@@ -55,17 +56,32 @@ namespace CleanArchitecture.Infraestructure
         private async Task PublishDomainEventsAsync()
         {
             // obtener todos los domain events que extiendan de la clase Entity
-            var domainEvents = ChangeTracker
-                .Entries<Entity>()
+            var domainEvents = ChangeTracker        // El ChangeTracker es el que sigue los cambios de EF.
+                .Entries<Entity>()                  // Se buscan todas las entidades que heredan de EntityBase
                 .Select(entry => entry.Entity)
-                .SelectMany(entity =>
+                .SelectMany(entity =>               // De cada entidad, se sacan los eventos de dominio que tenga acumulados (ejemplo: VehiculoReservadoEvent).
                 {
+                    // 3. Limpiar los eventos de las entidades (ya que se van a despachar)
                     var domainEvents = entity.GetDomainEvents();
                     entity.ClearDomainEvents();
                     return domainEvents;
                 }).ToList();
 
-            // Publicar los eventos
+            /* hace lo mismo que lo de arriba
+             var domainEvents = ChangeTracker
+                .Entries<EntityBase>() // todas las entidades rastreadas que heredan de EntityBase
+                .SelectMany(x => x.Entity.DomainEvents)
+                .ToList();
+            
+                foreach (var entity in ChangeTracker.Entries<EntityBase>())
+                {
+                    entity.Entity.ClearDomainEvents();
+                }
+             */
+
+
+
+            // 4. Publicar los eventos usando el publicador inyectado (ej: MediatR)
             foreach (var domainEvent in domainEvents) 
             {
                 await _publisher.Publish(domainEvent);

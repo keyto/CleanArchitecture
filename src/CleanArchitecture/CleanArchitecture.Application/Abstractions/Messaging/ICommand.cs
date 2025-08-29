@@ -20,8 +20,5 @@ namespace CleanArchitecture.Application.Abstractions.Messaging
 
     }
 
-    public interface IBaseCommand 
-    {
 
-    }
 }
