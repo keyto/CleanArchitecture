@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Infraestructure.Repositories
 {
-    internal sealed class VehiculoRepository : Repository<Vehiculo>, IVehiculoRepository
+    internal sealed class VehiculoRepository : Repository<Vehiculo,VehiculoId>, IVehiculoRepository
     {
         public VehiculoRepository(ApplicationDbContext dbContext) : base(dbContext)
         {

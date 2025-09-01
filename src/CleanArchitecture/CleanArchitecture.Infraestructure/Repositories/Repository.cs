@@ -10,9 +10,10 @@ namespace CleanArchitecture.Infraestructure.Repositories
 {
     // Implementacion de los metodos genericos que tienen todas las entidades,
     // Si alguna entidad tiene algun otro metodo especifico habria que implementarlo en su interfaz en el directorio 
-    // // de CleanArchitecture.Domain.XXXX 
-    internal abstract class Repository<T>
-        where T : Entity
+    // de CleanArchitecture.Domain.XXXX 
+    internal abstract class Repository<TEntity, TEntityId>
+        where TEntity : Entity<TEntityId>
+        where TEntityId : class
     {
         protected readonly ApplicationDbContext DbContext;
 
@@ -20,13 +21,13 @@ namespace CleanArchitecture.Infraestructure.Repositories
         {
             DbContext = dbContext;
         }
-        public async Task<T?> GetByIdAsync(Guid Id, CancellationToken cancellationToken) 
+        public async Task<TEntity?> GetByIdAsync(TEntityId Id, CancellationToken cancellationToken) 
         {
-            return await DbContext.Set<T>()
+            return await DbContext.Set<TEntity>()
                 .FirstOrDefaultAsync(x => x.Id == Id, cancellationToken);
         }
 
-        public void Add(T Entity)
+        public void Add(TEntity Entity)
         {
             DbContext.Add(Entity);
         }

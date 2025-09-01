@@ -3,15 +3,16 @@ using CleanArchitecture.Domain.Alquileres.Events;
 using CleanArchitecture.Domain.Vehiculos;
 using CleanArchitecture.Domain.Alquileres.Events;
 using CleanArchitecture.Domain.Shared;
+using CleanArchitecture.Domain.Users;
 
 namespace CleanArchitecture.Domain.Alquileres;
 
-public sealed class Alquiler : Entity
+public sealed class Alquiler : Entity<AlquilerId>
 {
    
-    public Guid VehiculoId {get; private set;}
+    public VehiculoId? VehiculoId {get; private set;}
 
-    public Guid UserId {get; private set;}
+    public UserId? UserId {get; private set;}
     public Moneda? PrecioPorPeriodo {get; private set;}
     public Moneda? Mantenimiento {get; private set;}
     public Moneda? Accesorios {get; private set;}
@@ -31,7 +32,7 @@ public sealed class Alquiler : Entity
     private Alquiler() 
     {
     }
-    private Alquiler(Guid id,Guid vehiculoId,Guid userId,DateRange duracion
+    private Alquiler(AlquilerId id,VehiculoId? vehiculoId,UserId userId,DateRange duracion
                         ,Moneda precioPorPeriodo,Moneda mantenimiento,Moneda accesorios,
                          Moneda precioTotal,AlquilerStatus status,DateTime fechaCreacion
 
@@ -51,7 +52,7 @@ public sealed class Alquiler : Entity
 
     public static Alquiler Reservar(
       Vehiculo vehiculo,
-      Guid userId,
+      UserId userId,
       DateRange duracion,
       DateTime fechaCreacion,
       PrecioService precioService
@@ -64,7 +65,7 @@ public sealed class Alquiler : Entity
 
 
         var alquiler = new Alquiler(
-            Guid.NewGuid(),
+            AlquilerId.New(),
             vehiculo.Id,
             userId,
             duracion,
@@ -94,7 +95,7 @@ public sealed class Alquiler : Entity
         Status = AlquilerStatus.Confirmado;
         FechaConfirmacion = utcNow;
 
-        RaiseDomainEvent(new AlquilerConfirmadoDomainEvent(Id));
+        RaiseDomainEvent(new AlquilerConfirmadoDomainEvent(Id!));   // ! significa que  sea Not nullable
         return Result.Success();
     }
 
@@ -131,7 +132,7 @@ public sealed class Alquiler : Entity
         
         Status = AlquilerStatus.Cancelado;
         FechaCancelacion = utcNow;
-        RaiseDomainEvent(new AlquilerCanceladoDomainEvent(Id));
+        RaiseDomainEvent(new AlquilerCanceladoDomainEvent(Id!));   // ! significa que  sea Not nullable
 
 
         return Result.Success();
@@ -146,7 +147,7 @@ public sealed class Alquiler : Entity
 
         Status = AlquilerStatus.Completado;
         FechaCompletado = utcNow;
-        RaiseDomainEvent(new AlquilerCompletadoDomainEvent(Id));
+        RaiseDomainEvent(new AlquilerCompletadoDomainEvent(Id!));   // ! significa que  sea Not nullable
 
 
         return Result.Success();

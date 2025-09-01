@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Domain.Users;
+﻿using CleanArchitecture.Domain.Reviews;
+using CleanArchitecture.Domain.Users;
 using CleanArchitecture.Domain.Vehiculos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -22,6 +23,10 @@ namespace CleanArchitecture.Infraestructure.Configurations
 
             // clave primaria
             builder.HasKey(user => user.Id);
+            // para convertir la propiedad AlquilerId en un dato conocido por la bd
+            builder.Property(user=> user.Id)
+                .HasConversion(userId => userId!.Value, value => new UserId(value));
+
 
             builder.Property(u => u.Nombre)
                .HasMaxLength(200)

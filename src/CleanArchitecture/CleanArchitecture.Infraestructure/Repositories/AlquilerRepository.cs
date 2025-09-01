@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Infraestructure.Repositories
 {
-    internal sealed class AlquilerRepository : Repository<Alquiler>, IAlquilerRepository
+    internal sealed class AlquilerRepository : Repository<Alquiler,AlquilerId>, IAlquilerRepository
     {
         private static readonly AlquilerStatus[] ActiveAlquilerStatuses = { 
             AlquilerStatus.Reservado,

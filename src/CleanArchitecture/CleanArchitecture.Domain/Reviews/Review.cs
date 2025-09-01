@@ -8,16 +8,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CleanArchitecture.Domain.Users;
 
 namespace CleanArchitecture.Domain.Reviews
 {
-    public sealed class Review : Entity
+    public sealed class Review : Entity<ReviewId>
     {
-        public Guid Id { get; private set; }
-        public Guid VehiculoId{ get; private set; }
-        public Guid AlquilerId { get; private set; }
-        public Guid UserId { get; private set; }
-        public Rating Rating { get; private set; }                      /*Object Value, solo puede ser de 1-5 esa logica va al OV */
+        public ReviewId? Id { get; private set; }
+        public VehiculoId? VehiculoId{ get; private set; }
+        public AlquilerId? AlquilerId { get; private set; }
+        public UserId? UserId { get; private set; }
+        public Rating? Rating { get; private set; }                      /*Object Value, solo puede ser de 1-5 esa logica va al OV */
 
         public Comentario? Comentario{ get; private set; }              /*Object Value*/
         public DateTime? FechaCreacion{ get; private set; }
@@ -25,7 +26,8 @@ namespace CleanArchitecture.Domain.Reviews
         private Review()
         {
         }
-        private Review(Guid id, Guid vehiculoId, Guid alquilerId, Guid userId, Rating rating, Comentario? comentario, DateTime? fechaCreacion) : base(id)
+        private Review(ReviewId id, VehiculoId vehiculoId, AlquilerId alquilerId, UserId userId, Rating rating, Comentario? comentario, DateTime? fechaCreacion) 
+            : base(id)
         {
             VehiculoId = vehiculoId;
             AlquilerId = alquilerId;
@@ -42,9 +44,9 @@ namespace CleanArchitecture.Domain.Reviews
                 return Result.Failure<Review>(ReviewsErrors.NotElegible);
             }
 
-            var review = new Review(Guid.NewGuid(),alquiler.VehiculoId,alquiler.Id,alquiler.UserId,rating,comentario,fechaCreacion);
+            var review = new Review(ReviewId.New(),alquiler.VehiculoId!,alquiler.Id!,alquiler.UserId!,rating,comentario,fechaCreacion);
 
-            review.RaiseDomainEvent(new ReviewCreateDomainEvent(review.Id));
+            review.RaiseDomainEvent(new ReviewCreateDomainEvent(review.Id!));
             return review;
         }
     }

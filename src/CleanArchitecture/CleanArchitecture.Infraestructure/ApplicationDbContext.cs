@@ -57,7 +57,7 @@ namespace CleanArchitecture.Infraestructure
         {
             // obtener todos los domain events que extiendan de la clase Entity
             var domainEvents = ChangeTracker        // El ChangeTracker es el que sigue los cambios de EF.
-                .Entries<Entity>()                  // Se buscan todas las entidades que heredan de EntityBase
+                .Entries<IEntity>()                  // Se buscan todas las entidades que heredan de EntityBase
                 .Select(entry => entry.Entity)
                 .SelectMany(entity =>               // De cada entidad, se sacan los eventos de dominio que tenga acumulados (ejemplo: VehiculoReservadoEvent).
                 {

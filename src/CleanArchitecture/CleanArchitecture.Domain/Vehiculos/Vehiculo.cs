@@ -3,7 +3,7 @@ using CleanArchitecture.Domain.Shared;
 
 namespace CleanArchitecture.Domain.Vehiculos;
 
-public sealed class Vehiculo : Entity
+public sealed class Vehiculo : Entity<VehiculoId>
 {
 
     private Vehiculo()
@@ -11,7 +11,7 @@ public sealed class Vehiculo : Entity
     }
 
     public Vehiculo(
-        Guid id,
+        VehiculoId id,
         Modelo modelo,
         Vin vin,
         Moneda precio,

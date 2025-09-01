@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Domain.Shared;
+using CleanArchitecture.Domain.Users;
 using CleanArchitecture.Domain.Vehiculos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,9 @@ namespace CleanArchitecture.Infraestructure.Configurations
             
             // clave primaria
             builder.HasKey(vehiculo => vehiculo.Id);
+            // para convertir la propiedad AlquilerId en un dato conocido por la bd
+            builder.Property(vehiculo => vehiculo.Id)
+                .HasConversion(vehiculoId => vehiculoId!.Value, value => new VehiculoId(value));
 
             // contiene un Object Value (direccion)
             // Esto significa que en la bd,la direccion se añadira tambien en la tabla Vehiculo,

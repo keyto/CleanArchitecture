@@ -43,7 +43,8 @@ namespace CleanArchitecture.Application.Alquileres.ReservarAlquiler
         public async Task<Result<Guid>> Handle(ReservarAlquilerCommand request, CancellationToken cancellationToken)
         {
             // Buscar al usuario
-            var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
+            var userId = new UserId(request.UserId);
+            var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
 
             if (user is null)
             {
@@ -51,7 +52,8 @@ namespace CleanArchitecture.Application.Alquileres.ReservarAlquiler
             }
 
             // Buscar al vehiculo
-            var vehiculo = await _vehiculoRepository.GetByIdAsync(request.VehiculoId, cancellationToken);
+            var vehiculoId = new VehiculoId(request.VehiculoId);
+            var vehiculo = await _vehiculoRepository.GetByIdAsync(vehiculoId, cancellationToken);
 
             if (vehiculo is null) 
             {             
@@ -70,7 +72,7 @@ namespace CleanArchitecture.Application.Alquileres.ReservarAlquiler
             // se mete en un Try por si hay alguna violacin de bd a la hora de insertar.
             try
             {
-                var alquiler = Alquiler.Reservar(vehiculo, user.Id, duracion, _dateTimeProvider.currentTime, _precioService);
+                var alquiler = Alquiler.Reservar(vehiculo, user.Id!, duracion, _dateTimeProvider.currentTime, _precioService);
 
                 _alquilerRepository.Add(alquiler);
 
@@ -78,7 +80,7 @@ namespace CleanArchitecture.Application.Alquileres.ReservarAlquiler
                 // SaveChangesAsync coge todo lo que esta en la memoria de Entity FrameWork y lo persiste en BD
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-                return alquiler.Id;
+                return alquiler.Id!.Value;
             }
             catch (ConcurrencyException ex)
             {

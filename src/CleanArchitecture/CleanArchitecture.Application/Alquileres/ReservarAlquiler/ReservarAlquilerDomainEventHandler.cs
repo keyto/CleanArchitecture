@@ -34,12 +34,12 @@ namespace CleanArchitecture.Application.Alquileres.ReservarAlquiler
                 return;
             }
 
-            var user = await _userRepository.GetByIdAsync(alquiler.UserId,cancellationToken);
+            var user = await _userRepository.GetByIdAsync(alquiler.UserId!,cancellationToken);
             if (user == null) {
                 return;
             }
 
-            await _emailService.SendAsync(user.Email, "Alquiler Reservado", "Tienes que confirmar la reserva para continuar.");
+            await _emailService.SendAsync(user.Email!, "Alquiler Reservado", "Tienes que confirmar la reserva para continuar.");
         }
     }
 }

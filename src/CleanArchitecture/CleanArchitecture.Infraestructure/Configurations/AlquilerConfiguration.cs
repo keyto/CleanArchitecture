@@ -23,6 +23,9 @@ namespace CleanArchitecture.Infraestructure.Configurations
 
             // clave primaria
             builder.HasKey(alquiler => alquiler.Id);
+            // para convertir la propiedad AlquilerId en un dato conocido por la bd
+            builder.Property(alquiler => alquiler.Id)
+                .HasConversion(AlquilerId => AlquilerId!.Value, value => new AlquilerId(value));
 
             // transformar un OV a valor primitivo
             builder.OwnsOne(alquiler => alquiler.PrecioPorPeriodo, precioBuilder =>

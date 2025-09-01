@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Domain.Reviews.Events
 {
-    public sealed record ReviewCreateDomainEvent(Guid alquilerId):IDomainEvent {}
+    public sealed record ReviewCreateDomainEvent(ReviewId reviewId):IDomainEvent;
 }

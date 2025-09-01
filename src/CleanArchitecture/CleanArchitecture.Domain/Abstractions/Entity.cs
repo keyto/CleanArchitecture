@@ -1,19 +1,17 @@
 namespace CleanArchitecture.Domain.Abstractions;
 
-public abstract class Entity
-{
+public abstract class Entity<TEntityId> : IEntity
+{    
+    public TEntityId? Id {get ; init;}
     private readonly List<IDomainEvent> _domainEvents = new();
 
-    protected Entity() 
+    protected Entity()
     {
     }
-
-    protected Entity(Guid id)
+    protected Entity(TEntityId id)
     {
         Id = id;
     }
-    
-    public Guid Id {get ; init;}
 
     public IReadOnlyList<IDomainEvent> GetDomainEvents()
     {
