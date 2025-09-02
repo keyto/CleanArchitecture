@@ -1,11 +1,25 @@
 using CleanArchitecture.Api.Extensions;
+using CleanArchitecture.Api.OptionsSetUp;
 using CleanArchitecture.Application;
+using CleanArchitecture.Application.Abstractions.Authentication;
 using CleanArchitecture.Infraestructure;
+using CleanArchitecture.Infraestructure.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //registra controladores para la Web API.
 builder.Services.AddControllers();
+
+// Authentication : Se indica que mi app tiene un proceso de autenticacion que se basa en el jwt
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer();  
+builder.Services.ConfigureOptions<JwtOptionsSetup>();
+builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
+builder.Services.AddTransient<IJwtProvider,JwtProvider>();
+
+builder.Services.AddAuthorization();
+
 
 // activar Swagger (documentación/try-it).
 builder.Services.AddEndpointsApiExplorer();
@@ -44,6 +58,9 @@ if (app.Environment.IsDevelopment())
 
 // Inyecto la gestion de excepciones del Middleware
 app.UseCustomExceptionHandler();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 //Mapea los controladores a rutas HTTP.
 app.MapControllers();
