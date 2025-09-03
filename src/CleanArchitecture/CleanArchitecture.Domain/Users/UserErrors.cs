@@ -11,5 +11,7 @@ namespace CleanArchitecture.Domain.Users
     {
         public static Error NotFound = new Error("User.NotFound", "No existe el usuario buscado por id");
         public static Error InvalidCredentials = new Error("User.InvalidCredentials", "Las credenciales son incorrectas");
+        public static Error AlreadyExists = new Error("User.AlreadyExists", "Ese usuario ya existe");
+        
     }
 }

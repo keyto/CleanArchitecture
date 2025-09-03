@@ -20,7 +20,9 @@ namespace CleanArchitecture.Application.Users.LoginUsers
         private readonly IUserRepository _userRepository;
         private readonly IJwtProvider _jwtProvider;
 
-        public LoginCommandHandler(IUserRepository userRepository, IJwtProvider jwtProvider)
+        public LoginCommandHandler(
+            IUserRepository userRepository, 
+            IJwtProvider jwtProvider)
         {
             _userRepository = userRepository;
             _jwtProvider = jwtProvider;

@@ -19,12 +19,16 @@ namespace CleanArchitecture.Infraestructure.Repositories
         {
             _dbContext = dbContext;
         }
-
     
-
         public async Task<User?> GetByEmailAsync(Domain.Users.Email email, CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<User>().FirstOrDefaultAsync(x => x.Email == email); 
+        }
+
+        public async Task<bool> IsUserExists(Domain.Users.Email email, CancellationToken cancellationToken = default)
+        {
+            return await _dbContext.Set<User>()
+                .AnyAsync(x => x.Email == email);
         }
     }
 }

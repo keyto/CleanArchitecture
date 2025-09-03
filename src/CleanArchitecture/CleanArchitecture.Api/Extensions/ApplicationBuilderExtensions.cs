@@ -22,7 +22,7 @@ namespace CleanArchitecture.Api.Extensions
                 {
                     var context = service.GetRequiredService<ApplicationDbContext>();
                     // Ejecuta en la bd de Postgree los archivos de migracion creados en el proyecto,
-                    // los de l folder Migrations
+                    // los del folder Migrations
                     await context.Database.MigrateAsync();
 
                 }

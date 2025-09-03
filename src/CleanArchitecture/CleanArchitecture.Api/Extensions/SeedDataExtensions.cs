@@ -4,22 +4,75 @@
 
 using Bogus;
 using CleanArchitecture.Application.Abstractions.Data;
+using CleanArchitecture.Domain.Users;
 using CleanArchitecture.Domain.Vehiculos;
 using CleanArchitecture.Infraestructure;
 using Dapper;
+using Microsoft.OpenApi.Writers;
+using System.Threading.Tasks;
 
 namespace CleanArchitecture.Api.Extensions
 {
     public static class SeedDataExtensions
     {
-        public static void SeedData(this IApplicationBuilder app) 
+        // crear usuarios de prueba
+        public static void SeedDataAuthentication(this IApplicationBuilder app)
+        {
+            using var scope = app.ApplicationServices.CreateScope() ;
+            var service = scope.ServiceProvider;
+
+            var loggerFactory = service.GetRequiredService<ILoggerFactory>();
+            try
+            {
+                var context = service.GetRequiredService<ApplicationDbContext>();
+
+                // si no hay usuarios creados
+                if (!context.Set<User>().Any())
+                {
+                    // inserta un nuevo usuario
+                    var passwordHash = BCrypt.Net.BCrypt.HashPassword("password1&");
+                    var user = User.Create(
+                        new Nombre("Fernando")
+                        ,new Apellido("Jimenez")
+                        ,new Email("keitoo@hotmail.com")
+                        ,new PasswordHash(passwordHash)
+                        );
+
+                    context.Add(user);
+
+                    // inserta un nuevo usuario
+                    var passwordHash2 = BCrypt.Net.BCrypt.HashPassword("password2&");
+                    var user2 = User.Create(
+                        new Nombre("Maria")
+                        , new Apellido("Quintela")
+                        , new Email("MariaQuintela@hotmail.com")
+                        , new PasswordHash(passwordHash2)
+                        );
+
+                    context.Add(user);
+
+
+                    // si el metodo  no es asincrono se usa esto.
+                    context.SaveChangesAsync().Wait();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                var logger = loggerFactory.CreateLogger<ApplicationDbContext>();
+                logger.LogError(ex.Message);
+            }
+        }
+
+        public static void SeedData(this IApplicationBuilder app)
         {
             // utilizamos Dapper para insertar registros
             // creamos un scope      
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var service = scope.ServiceProvider;
-                var sqlConnectionFactory  = scope.ServiceProvider.GetRequiredService<ISqlConnectionFactory>();
+                var sqlConnectionFactory = scope.ServiceProvider.GetRequiredService<ISqlConnectionFactory>();
 
                 // creamos conexion a la bd
                 using var connection = sqlConnectionFactory.CreateConnection();
@@ -27,7 +80,7 @@ namespace CleanArchitecture.Api.Extensions
                 //instanciar el obj que nos permite crear los datos de prueba
                 var faker = new Faker();
                 List<object> vehiculos = new();
-                for (int i = 0; i < 100; i++) 
+                for (int i = 0; i < 100; i++)
                 {
                     vehiculos.Add(new
                     {
@@ -56,8 +109,8 @@ namespace CleanArchitecture.Api.Extensions
                     """;
 
                 // Ejecutar el query
-                connection.Execute(sql,vehiculos);
-                
+                connection.Execute(sql, vehiculos);
+
             }
         }
     }

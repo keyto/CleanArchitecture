@@ -54,6 +54,8 @@ if (app.Environment.IsDevelopment())
 
     // llamamos al metodo de extension para que cree los registros de prueba
     app.SeedData();
+
+    app.SeedDataAuthentication();
 }
 
 // Inyecto la gestion de excepciones del Middleware

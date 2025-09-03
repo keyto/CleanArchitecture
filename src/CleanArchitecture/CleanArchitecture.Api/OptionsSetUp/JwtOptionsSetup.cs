@@ -16,7 +16,9 @@ namespace CleanArchitecture.Api.OptionsSetUp
 
         public void Configure(JwtOptions options)
         {
-            // leer toda la seccion del appsetting llamada "Jwt"
+            // leer toda la seccion del appsetting llamada "Jwt" con GetSection
+            // y meterla en un objeto de tipo JwtOptions .
+            // Se mapean las propiedades automaticamente
             _configuration.GetSection(SectionName).Bind(options);
         }
     }
