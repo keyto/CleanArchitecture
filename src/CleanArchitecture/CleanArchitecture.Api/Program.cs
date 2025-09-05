@@ -50,7 +50,7 @@ if (app.Environment.IsDevelopment())
     // Al crear ese comando solo se crean los archivos de migracion, pero no se crean las tablas en la bd
     // Al ejecutar el proyecto, ya se crean las tablas .
     // Ejecutamos el comando : dotnet run --project src/CleanArchitecture/CleanArchitecture.Api
-    app.ApplyMigration();
+    await app.ApplyMigration();
 
     // llamamos al metodo de extension para que cree los registros de prueba
     app.SeedData();

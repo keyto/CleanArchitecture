@@ -49,7 +49,7 @@ namespace CleanArchitecture.Api.Extensions
                         , new PasswordHash(passwordHash2)
                         );
 
-                    context.Add(user);
+                    context.Add(user2);
 
 
                     // si el metodo  no es asincrono se usa esto.

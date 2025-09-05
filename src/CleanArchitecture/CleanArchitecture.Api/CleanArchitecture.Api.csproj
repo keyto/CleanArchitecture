@@ -4,6 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
+    <ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:8.0</ContainerBaseImage>
+    <UserSecretsId>a6adcd99-018e-430d-91ea-fdc1f1071b6c</UserSecretsId>
+    <DockerfileContext>..\..\..</DockerfileContext>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
@@ -18,12 +23,17 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CleanArchitecture.Application\CleanArchitecture.Application.csproj" />
     <ProjectReference Include="..\CleanArchitecture.Infraestructure\CleanArchitecture.Infraestructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ContainerPort Include="8081" />
   </ItemGroup>
 
 </Project>

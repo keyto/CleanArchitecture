@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Domain.Reviews;
+using CleanArchitecture.Domain.Roles;
 using CleanArchitecture.Domain.Users;
 using CleanArchitecture.Domain.Vehiculos;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +47,11 @@ namespace CleanArchitecture.Infraestructure.Configurations
             .HasConversion(u => u!.Value, value => new Domain.Users.PasswordHash(value));
 
             builder.HasIndex(u => u.Email).IsUnique();
+
+            builder.HasMany(r => r.Roles)
+                .WithMany()
+                .UsingEntity<UserRole>();
+                   
 
 
         }

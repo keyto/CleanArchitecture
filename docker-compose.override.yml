@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+    cleanarchitecturedb:                                        # contaider de la bd postgree
+        container_name: cleanarchitecturedb
+        environment:                                            # Variables de entorno -> credenciales de acceso a la bd
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=cleanarchitecture
+        restart: always                                     
+        volumes:                                                # Monta volumen (carpeta container en la raiz del proyecto) para guardar la configuracion de la Bd
+            - ./.containers/database:/var/lib/postgresql/data/
+        ports:                                                  # Mapea el puerto host(interno):contenedor(externo)
+            - 5432:5432
+                
+    cleanarchitectureapi:                                        # contaider de la aplicacion .NET
+        container_name: cleanarchitectureapi
+        environment:                                             # Variables de entorno
+            - ASPNETCORE_ENVIRONMENT=Development                 # para que lea los datos del archivo de configuracion development.json
+            - ASPNETCORE_URLS=http://+:5000                      # en que url se va a ejecutar la app            
+            - DOTNET_USE_POLLING_FILE_WATCHER=1            
+            - "ConnectionStrings__Database=Host=cleanarchitecturedb;Port=5432;Database=cleanarchitecture;Username=postgres;Password=postgres"     # esta cadena de conexion reemplanzará en tiempo de ejecucion a la cadena de conexion que hay en el appsetting.json            
+        depends_on:                                              # Define orden de arranque, primero arranca cleanarchitecturedb y si no falla se carga este..
+            - cleanarchitecturedb
+        ports:                                                   # Mapea el puerto host:contenedor
+            - 80:5000
+        volumes:
+            - ./src:/src                                         # para hot reload / depuracion.
+       
+         
+        
+    
+        
+
+    
+        
+        
+  
