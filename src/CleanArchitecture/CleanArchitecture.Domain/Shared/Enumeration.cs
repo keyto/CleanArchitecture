@@ -83,9 +83,10 @@ namespace CleanArchitecture.Domain.Shared
             return obj is Enumeration<TEnum> other && Equals(other);
         }
 
-        public override int GetHashCode() 
+        public override int GetHashCode()
         {
             return Id.GetHashCode();
+        }
 
 
 

@@ -18,7 +18,7 @@ namespace CleanArchitecture.Infraestructure.Configurations
             // definir configuraciones tecnicas de clase User al crearse en la DB
 
             // nombre de la tabla
-            builder.ToTable("role");
+            builder.ToTable("roles");
 
             // clave primaria
             builder.HasKey(r => r.Id);

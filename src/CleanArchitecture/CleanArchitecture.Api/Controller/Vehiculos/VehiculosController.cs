@@ -1,6 +1,8 @@
 ﻿/*https://www.udemy.com/course/clean-architecture/learn/lecture/40759786#overview*/
 
 using CleanArchitecture.Application.Vehiculos.SearchVehiculos;
+using CleanArchitecture.Domain.Permissions;
+using CleanArchitecture.Infraestructure.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +20,9 @@ namespace CleanArchitecture.Api.Controller.Vehiculos
             _sender = sender;
         }
 
-        [Authorize]
+        //[Authorize(Roles = "LecturaDatos")]
+        // Para autorizar con permisos, hacemos un metodo que sobreescribe el Authorize de microsoft
+        [HasPermissionAttibutes(PermissionEnum.ReadUser)]
         [HttpGet("search")]        
         public async Task<IActionResult> SearchVehiculos(
             DateOnly startDate,
